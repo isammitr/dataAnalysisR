@@ -1,0 +1,443 @@
+RED WINE QUALITY by SAMMIT RANADE
+========================================================
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, packages}
+# Load all of the packages that you end up using in your analysis in this code
+# chunk.
+
+# Notice that the parameter "echo" was set to FALSE for this code chunk. This
+# prevents the code from displaying in the knitted HTML output. You should set
+# echo=FALSE for all code chunks in your file, unless it makes sense for your
+# report to show the code that generated a particular plot.
+
+# The other parameters for "message" and "warning" should also be set to FALSE
+# for other code chunks once you have verified that each plot comes out as you
+# want it to. This will clean up the flow of your report.
+
+library(ggplot2)
+library(gridExtra)
+library(dplyr)
+library(reshape2)
+library(GGally)
+```
+
+```{r echo=FALSE, Load_the_Data}
+# Load the Data
+#setwd("~/Desktop")
+#getwd()
+wr <- read.csv('wineQualityReds.csv' )
+#View(wr)
+names(wr)
+summary(wr)
+```
+
+From the above summary, we can see from the statistics how each object varies
+from Minimum to Maximum and their means, medians,etc.
+
+The dataset I am planning to explore is the Red Wine Quality 
+dataset. The guiding question for this dataset is "Which chemical properties 
+influence the quality of red wines?".This tidy data set contains 1,599 red 
+wines with 11 variables on the chemical properties of the wine. At least 3 
+wine experts rated the quality of each wine, providing a rating between 0 
+(very bad) and 10 (very excellent). This data set is a tidy set hence there 
+is no need to clean it. It contains some important characteristics of red 
+wines such as its pH, density, alcohol% present etc.
+
+# Univariate Plots Section
+
+```{r echo=FALSE,message=FALSE, warning=FALSE, Univariate_Plots}
+#qplot(x = density, data = wr)
+qplot(x = pH, data = wr)
+#qplot(x = alcohol, data = wr)
+#qplot(x = quality, data = wr)
+#qplot(x = citric.acid, data = wr)
+#qplot(x = residual.sugar, data = wr)
+summary(wr$pH)
+#Reason: To study univariate analysis of each variable in the dataset.
+```
+
+Reason: To study univariate analysis of each variable in the dataset.
+Reflection: 'pH' is plotted on X-axis. And from below all the rest variables 
+have been plotted on X-axis for studying them.
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+qplot(x = density, data = wr)
+```
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+qplot(x = alcohol, data = wr)
+```
+
+The below plot is shown by eliminating the outliers.
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+qplot(x = alcohol, data = wr) + xlim(8.5,14)
+```
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+#qplot(x = quality, data = wr)
+ggplot(wr, aes(x=factor(quality))) + geom_bar()
+```
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+qplot(x = citric.acid, data = wr)
+```
+
+The below plot is shown by eliminating the outliers.
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+qplot(x = citric.acid, data = wr) + xlim(0.00,0.75)
+```
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+qplot(x = residual.sugar, data = wr)
+```
+
+The below plot is shown by eliminating the outliers.
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+qplot(x = residual.sugar, data = wr) + xlim(1,5)
+```
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+qplot(x = fixed.acidity, data = wr)
+```
+
+The below plot is shown by eliminating the outliers.
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+qplot(x = fixed.acidity, data = wr) + xlim(5,13)
+```
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+qplot(x = volatile.acidity, data = wr)
+```
+
+The below plot is shown by eliminating the outliers.
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+qplot(x = volatile.acidity, data = wr) + xlim(0.2,1.1)
+```
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+qplot(x = sulphates, data = wr) 
+```
+
+The below plot is shown by eliminating the outliers.
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+qplot(x = sulphates, data = wr) + xlim(0.4,1.1)
+```
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+qplot(x = free.sulfur.dioxide, data = wr) 
+```
+
+The below plot is shown by eliminating the outliers.
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+qplot(x = free.sulfur.dioxide, data = wr) + xlim(0,45)
+```
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+qplot(x = total.sulfur.dioxide, data = wr) 
+```
+
+The below plot is shown by eliminating the outliers.
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+qplot(x = total.sulfur.dioxide, data = wr) + xlim(0,150)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+qplot(x = pH, data = wr) 
+```
+
+The below plot is shown by eliminating the outliers.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+qplot(x = pH, data = wr, xlim = c(3.0, 3.75)) 
+#Reason: To get better review of the histogram.
+```
+
+Reason: To get better review of the histogram.
+Reflection: The X-axis has been limited to pH 3.0 to 3.75 for better 
+understanding of the Histogram.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+p1 <- qplot(x = alcohol, data = wr)
+p2 <- qplot(x = log10(alcohol + 1), data = wr)
+p3 <- qplot(x = sqrt(alcohol), data = wr)
+
+grid.arrange(p1, p2, p3, ncol = 1)
+#Reason: To find if there are any variations by using logarithmic and sqrt 
+#functions
+```
+
+
+Reason: To find if there are any variations by using logarithmic and sqrt 
+functions
+Reflection: Here, we cannot see much difference in the histograms hence there is
+no need to transform data, we also need not compare any two features, so the
+box-plots haven't been used!
+
+# Univariate Analysis
+
+### What is the structure of your dataset?
+
+  The Structure of this dataset is a dataframe
+
+### What is/are the main feature(s) of interest in your dataset?
+
+  The main features of interest in this dataset are, 'density', 'pH',
+'alcohol', 'quality'
+
+### What other features in the dataset do you think will help support your \
+investigation into your feature(s) of interest?
+
+  'fixed.acidity', 'residual.sugar', 'citric.acid' such other features
+will help support the investigation into the features of interest. 
+
+### Did you create any new variables from existing variables in the dataset?
+
+  There was no need here to create any new variables from existing 
+variables in the dataset. 
+
+### Of the features you investigated, were there any unusual distributions? \
+Did you perform any operations on the data to tidy, adjust, or change the 
+form \ of the data? If so, why did you do this?
+
+  No, there were not any unsual distributions seen in the features investigated.
+Also, there was no need to perform any operations for data munging or tidying 
+of data as this dataset is already to structured, tidy and easy to work with.
+
+# Bivariate Plots Section
+
+ Based on what you saw in the univariate plots, what relationships
+between variables might be interesting to look at in this section? Don't limit
+yourself to relationships between a main output feature and one of the
+supporting variables. Try to look at relationships between supporting variables
+as well.
+
+```{r echo=FALSE, Bivariate_Plots}
+qplot(pH, density, data = wr)
+```
+
+Reason: The below plot can be properly studied as compared to the above one.
+Reflection:   density is plotted against pH in the above and below plots.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x = pH, y = density), data = wr) + geom_point(alpha = 0.3) + 
+  xlim(3.0,3.6) + ylim(0.992, 1.002)
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x = fixed.acidity, y = volatile.acidity), data = wr) + 
+  geom_point(alpha = 1/2, position = position_jitter(h = 0)) + 
+  xlim(4, 13) + coord_trans(y = "sqrt") 
+```
+
+Reason: We can check if there is any relation between these two.
+Reflection:   fixed acdity and volatile acidity with square root of volatile 
+acidity are plotted
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x = free.sulfur.dioxide, y = total.sulfur.dioxide), data = wr) + 
+  geom_point(alpha = 1/5) + xlim(0,40) + ylim(0,150)
+
+```
+
+Reason: To get to know the relation between free sulfur dioxide and total sulfur
+dioxide. We come to know how much one is dependent on other.
+Reflection: scatterplot of free sulfur dioxide and total sulfur dioxide is seen
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x = sulphates, y = total.sulfur.dioxide), data = wr) + 
+  geom_point(alpha = 1/3, color = "orange") + xlim(0.4, 0.9) + ylim(0,125) +
+  geom_line(stat = 'summary',fun.y = mean, color = "red") 
+```
+
+The mean of total.sulfur.dioxide against sulphates is seen in this 
+plot. This plot the variation between the total.sulfur.dioxide and sulphates 
+hence I have chosen this plot. Also I found it as interesting variation even
+though these two are not the main features of interest.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+wr.qual_by_alcohol <- wr %>%
+  group_by(alcohol) %>%
+  summarise(mean_quality = mean(quality),
+          median_quality = median(quality),
+          n = n()) %>%
+  arrange(alcohol)
+head(wr.qual_by_alcohol)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(alcohol, mean_quality), data = wr.qual_by_alcohol) + 
+  geom_line()
+#Reason: To see how much the quality varies alongwith the alcohol
+```
+
+Reason: To see how much the quality varies alongwith the alcohol
+Reflection: We see a downfall with wines containing 10% alcohol in them.
+hmm...interesting!
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+with(wr, cor.test(pH, quality, method = "pearson"))
+
+with(wr, cor.test(alcohol, quality, method = "pearson"))
+
+with(wr, cor.test(density, quality, method = "pearson"))
+
+#with(wr, cor.test(density, alcohol, method = "pearson"))
+```
+Reason: to find the strongest relationship between two characteristics.
+Reflection: Correaltion test is performed to check how strong the relationship 
+is between two characteristics. Alcohol and quality is the highest.
+
+
+# Bivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. How did the feature(s) of interest vary with other features 
+in \ the dataset?
+
+ Relation between Alcohol and quality is the strongest realtionship 
+seen.We can see that majorly the quality of Red wines depends upon the 
+alcohol percentage in them. Then comes the acidity and pH and then density.
+
+### Did you observe any interesting relationships between the other features \
+(not the main feature(s) of interest)?
+
+ (1)free.sulfur.dioxide and total.sulfur.dioxide (2)fixed.acidity 
+and volatile.acidity. These two relationships would catch interest which are
+other than main features we need. 
+
+### What was the strongest relationship you found?
+
+ The realtionship between Alcohol and quality is the strongest relationship 
+ seen in the main features of interest because the Pearson's coeffiecient is 
+ the highest (0.476)
+
+# Multivariate Plots Section
+
+```{r echo=FALSE, Multivariate_Plots}
+wr.qual_by_alcohol_density <- wr %>%
+  group_by(alcohol, density) %>%
+  summarise(mean_quality = mean(quality),
+            median_quality = median(quality),
+            n = n()) %>%
+  ungroup() %>%
+  arrange(alcohol)
+
+head(wr.qual_by_alcohol_density)
+#Reason: To study multivariate plots a new dataframe is introduced.
+```
+
+Reason: To study multivariate plots a new dataframe is introduced.
+Reflection:   A dataframe is made containg the quality with alcohol and density 
+for easy comparision.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x = density, y = alcohol),
+       data = wr.qual_by_alcohol_density) + geom_point(alpha = 1/2, 
+                                                       color = 'red')
+```
+
+
+
+# Multivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the \
+ investigation. Were there features that strengthened each other in terms of
+ or looking at your feature(s) of interest?
+
+ There was not much strengthening of relationships as compared to the
+bivariate analysis. Wines containing around 8%-12% of alcohol and 
+0.995-1.000g/cc denser are the better types of wines!
+
+### Were there any interesting or surprising interactions between features?
+
+ To my suprise, the multivariate plots did not show much interesting relations 
+ compared to the bivariate plots. 
+
+------
+
+# Final Plots and Summary
+
+### Plot One
+```{r echo=FALSE, message=FALSE, warning=FALSE, Plot_One}
+ggplot(aes(x = pH, y = density), data = wr) + 
+  geom_point(alpha = 0.2, color = 'blue') + 
+  xlim(3.0,3.75) + 
+  ggtitle("Density(g/cm^3) against pH")
+```
+
+### Description One
+ This plot shows that the wines which are acidic with pH around 
+3.2-3.4 and denser 0.995g/cc-1.000g/cc are better wines. This plot gives us 
+a good idea of the characteristics of Wines hence I have chosen this plot. 
+
+### Plot Two
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Plot_Two}
+
+
+ggplot(aes(x = sulphates, y = total.sulfur.dioxide), data = wr) + 
+  geom_point(alpha = 1/3,position = position_jitter(h = 0),
+             color = "orange") + 
+  xlim(0.4, 0.9) + ylim(0,125) +
+  geom_line(stat = 'summary',fun.y = mean, color = "red") +
+  ggtitle("Mean total Sulfur dioxide in Wines.total.sulfur.dioxide(mg/dm^3)
+          vs Sulphates(g/dm^3)")
+
+
+```
+
+
+### Description Two
+
+The red line which we see is the mean line for total.sulfur.dioxide. The mean of 
+total.sulfur.dioxide against sulphates is seen in this 
+plot. This plot the variation between the total.sulfur.dioxide and sulphates 
+hence I have chosen this plot. Also I found it as interesting variation even
+though these two are not the main features of interest.
+
+
+### Plot Three
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Plot_Three}
+ggplot(aes(x = density, y = alcohol),
+       data = wr.qual_by_alcohol_density) + 
+  geom_point(alpha = 1/2, color = 'red') +
+  ggtitle("Red Wines-Alcohol(%) vs. Density(g/cm^3)")
+
+
+```
+
+### Description Three
+
+ The above scatterplot shows that the red wines with density 
+0.995g/cc to 1.000g/cc containing 8%-12% alcohol are better. This plot gives a
+better/clear idea of the characteristics hence I have chosen this plot. 
+
+------
+
+# Reflection
+
+ The dataset I chose to explore is the Red Wine Quality. I chose this dataset 
+just out of interest :) ! This dataset was already structured as a 
+result I did not need to restructure it or data munging was not necessary. 
+I found that the wines containing alcohol 8%-12%, density 0.995g/cc-1.000g/cc 
+and pH 3.2-3.4 are better wines.While exploring, my first hurdle was to choose
+the correct characteristics to work on and explore. Then when I started 
+plotting, as I went on exploring I found it easy to work with. Plotting the
+bivariate plotting was helpful more than the multivariate plotting. I also 
+found an interesting realtionship between total.sulfur.dioxide and sulphates 
+present in the wines. We can add more data in the present dataset of the 
+present wines and hence work on the same modified dataset to check in the 
+future if there are any changes in the current findings and the reason 
+behind the changes in this time period!
